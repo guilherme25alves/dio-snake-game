@@ -31,6 +31,31 @@ function drawFood() {
      context.fillRect(food.x, food.y, box, box);
 }
 
+function reloadPage(timer) {
+     setTimeout(() => {
+          window.location.reload();
+     }, timer);
+}
+
+function gameOverAlert() {
+     Swal.fire({
+          title: 'GAME OVER <i style="margin-left: 10px; color:red;" class="fas fa-sad-cry"></i>',
+          text: "Relaxa, tenta novamente mais tarde!",
+          icon: 'error',
+          showDenyButton: true,
+          showCancelButton: false,
+          confirmButtonText: `OK`,
+          denyButtonText: `Cancel`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+               Swal.fire('Obrigado pela participação!', '', 'success')                              
+          } else if (result.isDenied) {
+               Swal.fire('Vou aguardar seu retorno', '', 'info')                                   
+          }
+          reloadPage(2500);
+        });
+}
+
 document.addEventListener('keydown', update);
 
 function update(event) {
@@ -50,7 +75,7 @@ function iniciarJogo() {
      for(i = 1; i < snake.length; i++) {
           if(snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
                clearInterval(jogo);
-               alert("GAME OVER !");
+               gameOverAlert();
           }
      }
 
@@ -82,5 +107,14 @@ function iniciarJogo() {
 
 }
 
-let jogo = setInterval(iniciarJogo, 100);
+let jogo;
+
+function startGame() {
+     document.getElementsByTagName('img')[0].style.display = "none"; 
+     document.getElementsByTagName('h4')[0].style.display = "none";     
+     document.getElementById("canvaDivElement").style.display = "block";
+     jogo = setInterval(iniciarJogo, 100);
+}
+
+
 
